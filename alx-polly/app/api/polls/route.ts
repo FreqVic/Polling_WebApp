@@ -1,11 +1,13 @@
 import { NextRequest, NextResponse } from 'next/server';
 import { createRouteHandlerClient } from '@supabase/auth-helpers-nextjs';
-import { cookies as cookiesFn } from 'next/headers';
+import { cookies } from 'next/headers';
 
 export async function POST(req: NextRequest) {
-  const cookies = await cookiesFn();
-  const supabase = createRouteHandlerClient({ cookies });
+  const cookieStore = await cookies(); // ✅ await cookies()
+  const supabase = createRouteHandlerClient({ cookies: () => cookieStore });
+
   const { data: { user }, error: userError } = await supabase.auth.getUser();
+  console.log('Supabase user:', user, 'Error:', userError);
 
   if (userError || !user) {
     return NextResponse.json({ error: 'Unauthorized' }, { status: 401 });
@@ -18,7 +20,7 @@ export async function POST(req: NextRequest) {
 
   const { data: poll, error: pollError } = await supabase
     .from('polls')
-    .insert([{ question, created_by: user.id }])
+    .insert([{ question, user_id: user.id }])
     .select()
     .single();
 
@@ -43,9 +45,11 @@ export async function POST(req: NextRequest) {
 }
 
 export async function GET(req: NextRequest) {
-  const cookies = await cookiesFn();
-  const supabase = createRouteHandlerClient({ cookies });
+  const cookieStore = await cookies(); // ✅ await cookies()
+  const supabase = createRouteHandlerClient({ cookies: () => cookieStore });
+
   const { data: { user }, error: userError } = await supabase.auth.getUser();
+  console.log('Supabase user:', user, 'Error:', userError);
 
   if (userError || !user) {
     return NextResponse.json({ error: 'Unauthorized' }, { status: 401 });

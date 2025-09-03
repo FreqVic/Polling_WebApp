@@ -9,11 +9,6 @@
 - Always use semicolons.
 - Use TypeScript for all source files.
 
-### 2. File & Folder Structure
-- Place all React components in the `components/` directory.
-- Place all utility functions and context providers in the `lib/` directory.
-- Use the `app/` directory for Next.js App Router pages and layouts.
-- Static assets go in the `public/` directory.
 
 ### 3. Authentication
 - Use Supabase for authentication.
@@ -44,4 +39,4 @@
 
 ---
 
-_Keep this file updated as the project evolves._
+_Keep this file updated as the project evolves._```

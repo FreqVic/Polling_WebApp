@@ -6,7 +6,7 @@ import { useAuth } from '@/lib/authcontext';
 import { Card } from '@/components/ui/card';
 
 export default function DashboardPage() {
-  const { user, loading } = useAuth();
+  const { user, loading, signOut } = useAuth(); // ✅ bring in signOut
   const router = useRouter();
 
   useEffect(() => {
@@ -23,13 +23,24 @@ export default function DashboardPage() {
     <div className="flex flex-col items-center min-h-screen py-8 bg-gray-50">
       <Card className="w-full max-w-2xl p-8 mb-8 flex flex-col items-center">
         <h1 className="text-3xl font-bold mb-4">Welcome, {user.email || 'User'}!</h1>
-        <button
-          className="bg-blue-600 text-white px-6 py-2 rounded hover:bg-blue-700 transition mb-4"
-          onClick={() => router.push('/create-poll')}
-        >
-          + Create Poll
-        </button>
-        <p className="text-gray-600">Start a new poll or view your existing ones below.</p>
+        <div className="flex gap-4">
+          <button
+            className="bg-blue-600 text-white px-6 py-2 rounded hover:bg-blue-700 transition"
+            onClick={() => router.push('/create-poll')}
+          >
+            + Create Poll
+          </button>
+          <button
+            className="bg-red-600 text-white px-6 py-2 rounded hover:bg-red-700 transition"
+            onClick={async () => {
+              await signOut();
+              router.push('/auth'); // ✅ redirect after signout
+            }}
+          >
+            Sign Out
+          </button>
+        </div>
+        <p className="text-gray-600 mt-4">Start a new poll or view your existing ones below.</p>
       </Card>
       <Card className="w-full max-w-2xl p-8">
         <h2 className="text-xl font-semibold mb-2">Your Polls</h2>

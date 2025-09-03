@@ -53,6 +53,7 @@ const CreatePollPage: React.FC = () => {
       method: 'POST',
       headers: { 'Content-Type': 'application/json' },
       body: JSON.stringify({ question, options: filteredOptions }),
+      credentials: 'include', // ✅ ensures Supabase session cookie is sent
     });
     setSubmitting(false);
     if (res.ok) {
