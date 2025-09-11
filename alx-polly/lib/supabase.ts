@@ -1,6 +1,11 @@
-import { createPagesBrowserClient } from '@supabase/auth-helpers-nextjs'
+import { createClient } from '@supabase/supabase-js';
 
-export const supabase = createPagesBrowserClient({
-  supabaseUrl: process.env.NEXT_PUBLIC_SUPABASE_URL,
-  supabaseKey: process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY,
-})
+/**
+ * Initializes and exports the Supabase client for the app.
+ * Uses environment variables for project URL and anon key.
+ * Never expose secrets in client-side code.
+ */
+export const supabase = createClient(
+  process.env.NEXT_PUBLIC_SUPABASE_URL!,
+  process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY!
+);
