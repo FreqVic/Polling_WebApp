@@ -3,10 +3,10 @@ import { createRouteHandlerClient } from '@supabase/auth-helpers-nextjs';
 import { cookies } from 'next/headers';
 
 export async function POST(req: NextRequest) {
-  const cookieStore = await cookies(); // ✅ await cookies()
-  const supabase = createRouteHandlerClient({ cookies: () => cookieStore });
+  const supabase = createRouteHandlerClient({ cookies: async () => await cookies() });
 
   const { data: { user }, error: userError } = await supabase.auth.getUser();
+  // Debug log for troubleshooting
   console.log('Supabase user:', user, 'Error:', userError);
 
   if (userError || !user) {
@@ -20,7 +20,7 @@ export async function POST(req: NextRequest) {
 
   const { data: poll, error: pollError } = await supabase
     .from('polls')
-    .insert([{ question, user_id: user.id }])
+    .insert([{ question, created_by: user.id }])
     .select()
     .single();
 
@@ -45,10 +45,10 @@ export async function POST(req: NextRequest) {
 }
 
 export async function GET(req: NextRequest) {
-  const cookieStore = await cookies(); // ✅ await cookies()
-  const supabase = createRouteHandlerClient({ cookies: () => cookieStore });
+  const supabase = createRouteHandlerClient({ cookies: async () => await cookies() });
 
   const { data: { user }, error: userError } = await supabase.auth.getUser();
+  // Debug log for troubleshooting
   console.log('Supabase user:', user, 'Error:', userError);
 
   if (userError || !user) {
